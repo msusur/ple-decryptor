@@ -50,9 +50,21 @@ class FileParser {
       fileHeader: setPointerAndSlice(buffer, 10).toString('utf8'),
       unknownHeaderBytes: setPointerAndSlice(buffer, 4),
       passwordLength: setPointerAndSlice(buffer, 4),
-      passwordCheckString: setPointerAndSlice(buffer, 13).toString('utf8'),
+      passwordCheckBytes: setPointerAndSlice(buffer, 13),
       headerLength: pointer
     });
+  }
+
+  unscramblePassword() {
+    const passwordBytes = this.fileFormat.header.passwordCheckBytes;
+    const newPasswordBytes = [];
+    const count = passwordBytes.length;
+    for (let idx = 0; idx < count - 1; idx += 1) {
+      newPasswordBytes[idx] = passwordBytes[idx] + passwordBytes[idx + 1];
+    }
+    newPasswordBytes[count - 1] = passwordBytes[count - 1] + passwordBytes[0];
+    let buffer = new Buffer(newPasswordBytes);
+    return buffer.toString('utf8');
   }
 
   isFileHeaderValid() {
@@ -71,6 +83,9 @@ class FileParser {
         offset = chunkResult.offset;
         this.fileFormat.chunks.push(chunkResult);
         observer.next({ chunk: chunkResult, file: this.fileFormat });
+      }
+      if (buffer.length - offset > 0) {
+        observer.next(this.parseCurrentChunk(buffer, offset));
       }
       observer.complete(this.fileFormat);
     });

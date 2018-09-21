@@ -11,13 +11,13 @@ class Header {
     fileHeader,
     unknownHeaderBytes,
     passwordLength,
-    passwordCheckString,
+    passwordCheckBytes,
     headerLength
   }) {
     this.fileHeader = fileHeader;
     this.unknownHeaderBytes = unknownHeaderBytes;
     this.passwordLength = passwordLength;
-    this.passwordCheckString = passwordCheckString;
+    this.passwordCheckBytes = passwordCheckBytes;
     this.headerLength = headerLength;
   }
 }
