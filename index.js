@@ -5,6 +5,7 @@ const parser = new FileParser(filePath);
 if (!parser.isFileHeaderValid()) {
   throw new Error('Invalid format');
 }
+
 const readFile$ = parser.startReading();
 let chunkCount = 0;
 const onNext = data => {
@@ -15,9 +16,15 @@ const onNext = data => {
   );
 };
 
+console.log(
+  `Scrambled password ${parser.fileFormat.header.passwordCheckBytes.toString(
+    'utf8'
+  )}`
+);
 const password = parser.unscramblePassword();
-const unicodePassword = password.toString('utf8');
-const subscription = readFile$.subscribe(
+console.log(`Scrambled password ${password.toString('utf8')}`);
+
+readFile$.subscribe(
   onNext,
   err => {
     debugger;
