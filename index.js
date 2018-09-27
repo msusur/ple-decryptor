@@ -6,21 +6,23 @@ if (!parser.isFileHeaderValid()) {
   throw new Error('Invalid format');
 }
 const readFile$ = parser.startReading();
+let chunkCount = 0;
 const onNext = data => {
-  // console.log(data.file);
-  debugger;
+  console.log(
+    `Chunk number is ${chunkCount++} with the size '${
+      data.chunk.dataLength
+    }' bytes.`
+  );
 };
 
 const password = parser.unscramblePassword();
-
+const unicodePassword = password.toString('utf8');
 const subscription = readFile$.subscribe(
   onNext,
   err => {
     debugger;
   },
   file => {
-    subscription.dispose();
+    console.log('=====DONE.');
   }
 );
-
-debugger;
