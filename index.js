@@ -1,5 +1,5 @@
 const FileParser = require('./parser/file-parser'),
-  filePath = './samples/sample1.ple';
+  filePath = './samples/sample2.ple';
 
 const parser = new FileParser(filePath);
 if (!parser.isFileHeaderValid()) {
@@ -7,7 +7,7 @@ if (!parser.isFileHeaderValid()) {
 }
 
 const readFile$ = parser.startReading();
-let chunkCount = 0;
+let chunkCount = 1;
 const onNext = data => {
   console.log(
     `Chunk number is ${chunkCount++} with the size '${
@@ -21,8 +21,14 @@ console.log(
     'utf8'
   )}`
 );
+console.log(
+  `Scrambled password in bytes:
+  [ '0x${parser.fileFormat.header.passwordCheckBytes.join(' 0x')}' ]`
+);
 const password = parser.unscramblePassword();
-console.log(`Scrambled password ${password.toString('utf8')}`);
+console.log(`Unscrambled password ${password.toString('utf8')}`);
+console.log(`Unscrambled password in bytes:
+  [ '0x${password.join(' 0x')}' ]`);
 
 readFile$.subscribe(
   onNext,

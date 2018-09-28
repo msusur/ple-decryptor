@@ -100,12 +100,6 @@ class FileParser {
         this.fileFormat.chunks.push(chunkResult);
         observer.next({ chunk: chunkResult, file: this.fileFormat });
       }
-      if (buffer.length - offset > 0) {
-        observer.next({
-          chunk: this.parseCurrentChunk(buffer, offset),
-          file: this.fileFormat
-        });
-      }
       observer.complete(this.fileFormat);
     });
   }
