@@ -113,9 +113,6 @@ class FileParser {
     const endingByte = seekBytes(CHUNK_SIGNATURE, newChunkBody.slice(4));
     const dataLength = getInteger(newChunkBody.slice(4).slice(0, 4));
     const encryptedText = newChunkBody.slice(4, endingByte);
-    // if (encryptedText.length !== dataLength) {
-    //   throw new Error('Checksum error on validating the chunk size.');
-    // }
     return {
       signature,
       dataLength,
